@@ -4,31 +4,101 @@
       <div class="col-md-6 col-md-offset-3 col-xs-12">
         <h1 class="text-xs-center">Sign in</h1>
 
-        <form>
-          <fieldset class="form-group">
+        <form #form="ngForm" (ngSubmit)="login(form)">
+          <fieldset
+            class="form-group"
+            [class.has-danger]="isInvalid(form, mEmail)"
+          >
             <input
               name="email"
               class="form-control form-control-lg"
               type="text"
               placeholder="Email"
+              [(ngModel)]="user.email"
+              #mEmail="ngModel"
+              required
+              email
             />
+            <div
+              class="form-control-feedback"
+              *ngIf="isInvalid(form, mEmail) && mEmail?.errors?.['email']"
+            >
+              * Email格式不正確
+            </div>
           </fieldset>
-          <fieldset class="form-group">
+          <fieldset
+            class="form-group"
+            [class.has-danger]="isInvalid(form, mPassword)"
+          >
             <input
               name="password"
               class="form-control form-control-lg"
               type="password"
               placeholder="Password"
+              [(ngModel)]="user.password"
+              #mPassword="ngModel"
+              required
+              minlength="4"
             />
+            <div
+              class="form-control-feedback"
+              *ngIf="isInvalid(form, mPassword) && mPassword?.errors?.['required']"
+            >
+              * 請輸入密碼
+            </div>
           </fieldset>
           <button
-            type="button"
             class="btn btn-lg btn-primary pull-xs-right"
-            (click)="login()"
+            [disabled]="form.submitted && form.invalid"
           >
             Sign in
           </button>
         </form>
+
+        <!-- <form [formGroup]="form" #f="ngForm" (ngSubmit)="login()">
+          <fieldset
+            class="form-group"
+            [class.has-danger]="isInvalid(f, emailCtrl)"
+          >
+            <input
+              name="email"
+              class="form-control form-control-lg"
+              type="text"
+              placeholder="Email"
+              formControlName="email"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="isInvalid(f, emailCtrl) && emailCtrl?.errors?.['email']"
+            >
+              * Email格式不正確
+            </div>
+          </fieldset>
+          <fieldset
+            class="form-group"
+            [class.has-danger]="isInvalid(f, passwordCtrl)"
+          >
+            <input
+              name="password"
+              class="form-control form-control-lg"
+              type="password"
+              placeholder="Password"
+              formControlName="password"
+            />
+            <div
+              class="form-control-feedback"
+              *ngIf="isInvalid(f, passwordCtrl) && passwordCtrl?.errors?.['required']"
+            >
+              * 請輸入密碼
+            </div>
+          </fieldset>
+          <button
+            class="btn btn-lg btn-primary pull-xs-right"
+            [disabled]="f.submitted && form.invalid"
+          >
+            Sign in
+          </button>
+        </form> -->
       </div>
     </div>
   </div>
