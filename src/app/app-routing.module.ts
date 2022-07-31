@@ -7,7 +7,6 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'posts', pathMatch: 'full' },
       {
         path: '',
         loadChildren: () =>
