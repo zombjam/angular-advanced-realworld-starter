@@ -6,6 +6,9 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CreateArticle } from 'src/app/interfaces/create-article';
+import { PostService } from 'src/app/post.service';
 
 @Component({
   selector: 'app-create',
@@ -30,13 +33,21 @@ export class CreateComponent implements OnInit {
     return this.form.get('tagList') as FormArray<FormControl<string | null>>;
   }
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private postService: PostService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
   createPost() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      this.postService
+        .createArticle(this.form.value as CreateArticle)
+        .subscribe(() => {
+          this.router.navigate(['/']);
+        });
     }
   }
 
