@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroupDirective,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CreateArticle } from 'src/app/interfaces/create-article';
 import { PostService } from 'src/app/post.service';
@@ -29,10 +23,6 @@ export class CreateComponent implements OnInit {
 
   tag = '';
 
-  get tagList() {
-    return this.form.get('tagList') as FormArray<FormControl<string | null>>;
-  }
-
   constructor(
     private fb: FormBuilder,
     private postService: PostService,
@@ -54,12 +44,12 @@ export class CreateComponent implements OnInit {
   addTag(event: Event) {
     event.preventDefault();
     const value = (event.target as HTMLInputElement).value;
-    this.tagList.push(this.fb.control(value));
+    this.form.controls.tagList.push(this.fb.control(value));
     this.tag = '';
   }
 
   removeTag(index: number) {
-    this.tagList.removeAt(index);
+    this.form.controls.tagList.removeAt(index);
   }
 
   isInvalid(f: FormGroupDirective, ctrlName: string) {

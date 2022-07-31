@@ -40,11 +40,14 @@
               placeholder="Enter tags"
               [(ngModel)]="tag"
               [ngModelOptions]="{ standalone: true }"
-              (keydown.enter)="addTag($event)"
+              (keyup.enter)="addTag($event)"
             />
             <div class="tag-list" formArrayName="tagList">
               <ng-container
-                *ngFor="let tagCtrl of tagList.controls; let index = index"
+                *ngFor="
+                  let tagCtrl of form.controls.tagList.controls;
+                  let index = index
+                "
               >
                 <span
                   class="label label-pill label-default"
