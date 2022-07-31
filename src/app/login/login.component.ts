@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,9 +36,14 @@ export class LoginComponent implements OnInit {
       this.loginService
         .login(form.value as UserLoginInfo)
         .pipe(map((response) => response.user))
-        .subscribe((info) => {
-          localStorage.setItem('token', info.token);
-          this.router.navigate([this.redirectTo]);
+        .subscribe({
+          next: (info) => {
+            localStorage.setItem('token', info.token);
+            this.router.navigate([this.redirectTo]);
+          },
+          error: (error: HttpErrorResponse) => {
+            alert(error.error.body);
+          },
         });
     }
   }
