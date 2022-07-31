@@ -1,4 +1,4 @@
-<div class="post-page">
+<div class="post-page" *ngIf="article$ | async as article">
   <div class="banner">
     <div class="container">
       <h1>{{ article?.title }}</h1>
