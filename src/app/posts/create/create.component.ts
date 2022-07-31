@@ -4,6 +4,11 @@ import { Router } from '@angular/router';
 import { CreateArticle } from 'src/app/interfaces/create-article';
 import { PostService } from 'src/app/post.service';
 
+const bodyValidators = Validators.compose([
+  Validators.required,
+  Validators.minLength(10),
+]);
+
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -15,9 +20,7 @@ export class CreateComponent implements OnInit {
       validators: [Validators.required],
     }),
     description: this.fb.control<string>(''),
-    body: this.fb.control<string>('', {
-      validators: [Validators.required, Validators.minLength(10)],
-    }),
+    body: this.fb.control<string>(''),
     tagList: this.fb.array<string>(['programming', 'javascript', 'webdev']),
   });
 
@@ -29,7 +32,18 @@ export class CreateComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // 動態更新驗證器
+    this.form.controls.title.statusChanges.subscribe((status) => {
+      if (status === 'VALID') {
+        this.form.controls.body.addValidators(bodyValidators ?? []);
+        this.form.controls.body.updateValueAndValidity();
+      } else if (status === 'INVALID') {
+        this.form.controls.body.removeValidators(bodyValidators ?? []);
+        this.form.controls.body.updateValueAndValidity();
+      }
+    });
+  }
 
   createPost() {
     if (this.form.valid) {

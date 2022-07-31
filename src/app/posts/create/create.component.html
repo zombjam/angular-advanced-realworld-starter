@@ -13,6 +13,14 @@
               placeholder="Post Title"
               formControlName="title"
             />
+            <div
+              class="form-control-feedback"
+              *ngIf="isInvalid(f, 'title') && form.controls.title.errors"
+            >
+              <div *ngIf="form.controls.title.errors['required']">
+                請輸入標題
+              </div>
+            </div>
           </fieldset>
           <fieldset class="form-group">
             <textarea
@@ -32,6 +40,15 @@
               placeholder="Post body"
               [formControl]="form.controls.body"
             ></textarea>
+
+            <div *ngIf="isInvalid(f, 'body') && form.controls.body.errors">
+              <div *ngIf="form.controls.body.errors['required']">
+                請輸入內容
+              </div>
+              <div *ngIf="form.controls.body.errors['minlength']">
+                內容長度不合
+              </div>
+            </div>
           </fieldset>
           <fieldset class="form-group">
             <input
