@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { UserLoginInfo } from '../interfaces/login-info';
 import { LoginService } from '../login.service';
@@ -15,9 +15,20 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  redirectTo = '/';
 
-  ngOnInit(): void {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((param) => {
+      const redirectTo = param.get('redirect') ?? '/';
+      this.redirectTo = redirectTo;
+    });
+  }
 
   login(form: NgForm) {
     if (form.valid) {
@@ -26,7 +37,7 @@ export class LoginComponent implements OnInit {
         .pipe(map((response) => response.user))
         .subscribe((info) => {
           localStorage.setItem('token', info.token);
-          this.router.navigate(['/']);
+          this.router.navigate([this.redirectTo]);
         });
     }
   }
